@@ -8,13 +8,15 @@
     <q-item-section side top>
       <q-checkbox
         v-model="task.completed"
+        keep-color
+        
+        color="grey-7"
         size="xs"
-        color="cyan-9"
-        class="no-pointer-events "
+        class="no-pointer-events rounded-checkbox "
       />
     </q-item-section>
 
-    <q-item-section>
+    <q-item-section >
       <q-item-label :class="{ 'text-strike': task.completed }">
         <!-- <q-item-label :class="task.completed ? 'text-strike' : ''"> -->
         {{ task.name }}
@@ -102,4 +104,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style >
+/* .q-checkbox__bg {
+  border-radius: 10px;
+} */
+.rounded-checkbox .q-checkbox__bg {
+  border-radius: 10px;
+
+}
+</style>

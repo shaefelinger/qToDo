@@ -1,8 +1,18 @@
 <template>
   <q-page class="q-pa-md  ">
-    <q-list v-if="Object.keys(tasks).length" bordered separator>
-      <Task v-for="(task, key) in tasks" :key="key" :task="task" :id="key" />
-    </q-list>
+    <div class="row q-mb-lg">
+      <Search />
+    </div> 
+
+    <p v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length ">No search results</p>
+
+    <NoTasks v-if="!Object.keys(tasksTodo).length && !search" />
+
+    <TasksTodo :tasksTodo="tasksTodo" v-if="Object.keys(tasksTodo).length " />
+    <TasksCompleted
+      v-if="Object.keys(tasksCompleted).length"
+      :tasksCompleted="tasksCompleted"
+    />
 
     <div class="absolute-bottom text-center q-mb-lg">
       <q-btn
@@ -25,14 +35,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import Task from "components/Tasks/Task";
 import AddTask from "components/Tasks/Modals/AddTask";
+import TasksTodo from "components/Tasks/TasksTodo";
+import TasksCompleted from "components/Tasks/TasksCompleted";
+import NoTasks from "components/Tasks/NoTasks";
+import Search from "components/Tasks/Tools/Search";
 
 export default {
   components: {
     Task,
-    AddTask
+    AddTask,
+    TasksTodo,
+    TasksCompleted,
+    NoTasks,
+    Search
   },
   data() {
     return {
@@ -40,13 +58,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("tasks", ["tasks"])
-
-    // tasks() {
-    //   return this.$store.getters["tasks/tasks"];
-    // }
+    ...mapGetters("tasks", ["tasksTodo", "tasksCompleted"]),
+    ...mapState('tasks', ['search'])
+  },
+  mounted() {
+    this.$root.$on("showAddTask", () => {
+      this.showAddTask = true;
+    });
+    console.log(this.$q.dark.mode) ;
   }
 };
 </script>
 
-<style scoped=""></style>
+<style >
+
+</style>
