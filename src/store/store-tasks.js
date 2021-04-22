@@ -25,9 +25,6 @@ const state = {
 };
 
 const mutations = {
-  // updateTask(state, payload) {
-  //   console.log("payload (mutation)", payload);
-  // },
   UPDATE_TASK: (state, payload) => {
     Object.assign(state.tasks[payload.id], payload.updates);
   },
