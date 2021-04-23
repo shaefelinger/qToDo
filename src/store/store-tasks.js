@@ -38,7 +38,10 @@ const mutations = {
   },
   SET_SEARCH(state, value) {
     state.search = value;
-  }
+  },
+  SET_SORT(state, value) {
+    state.sort = value;
+  },
 };
 
 const actions = {
@@ -59,7 +62,10 @@ const actions = {
   },
   setSearch(context, value) {
     context.commit("SET_SEARCH", value);
-  }
+  },
+  setSort(context, value) {
+    context.commit("SET_SORT", value);
+  },
 };
 
 const getters = {
