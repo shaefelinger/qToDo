@@ -44,7 +44,6 @@
           @click.stop="showEditTask = true"
           flat
           round
-          color="primary"
           dense
           icon="edit"
         />
@@ -52,7 +51,6 @@
           @click.stop="promptToDelete(id)"
           flat
           round
-          color="red-8"
           dense
           icon="delete"
         />

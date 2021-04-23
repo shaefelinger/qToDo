@@ -2,6 +2,7 @@
   <q-page class="q-pa-md  ">
     <div class="row q-mb-lg">
       <Search />
+      <Sort />
     </div> 
 
     <p v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length ">No search results</p>
@@ -42,6 +43,7 @@ import TasksTodo from "components/Tasks/TasksTodo";
 import TasksCompleted from "components/Tasks/TasksCompleted";
 import NoTasks from "components/Tasks/NoTasks";
 import Search from "components/Tasks/Tools/Search";
+import Sort from "components/Tasks/Tools/Sort";
 
 export default {
   components: {
@@ -50,7 +52,8 @@ export default {
     TasksTodo,
     TasksCompleted,
     NoTasks,
-    Search
+    Search,
+    Sort
   },
   data() {
     return {
