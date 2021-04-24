@@ -65,7 +65,7 @@ export default {
       this.taskToSubmit.dueTime = "";
     }
   },
-  mounted() {
+  created() {
     this.taskToSubmit = Object.assign({}, this.task);
   }
 };

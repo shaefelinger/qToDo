@@ -3,6 +3,7 @@
     <q-input
       outlined
       autofocus
+      v-select-all
       :value="name"
       @input="$emit('update:name', $event)"
       label="Task name"
@@ -23,8 +24,12 @@
 </template>
 
 <script>
+import { selectAll } from 'src/directives/directive-select-all'
 export default {
-  props: ["name"]
+  directives: {
+    selectAll
+  },
+  props: ["name"],
 };
 </script>
 
