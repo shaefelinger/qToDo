@@ -19,9 +19,9 @@
     </q-item-section>
 
     <q-item-section >
-      <q-item-label :class="{ 'text-strike': task.completed }">
-        <!-- <q-item-label :class="task.completed ? 'text-strike' : ''"> -->
-        {{ task.name }}
+      <q-item-label 
+        :class="{ 'text-strike': task.completed }"
+        v-html="$options.filters.searchHighlight(task.name, search)">
       </q-item-label>
     </q-item-section>
 
@@ -32,7 +32,7 @@
         </div>
         <div class="column">
           <q-item-label class="row justify-end" caption>
-            {{ task.dueDate }}
+            {{ task.dueDate | niceDate }}
           </q-item-label>
           <q-item-label class="row justify-end" caption>
             {{ task.dueTime }}
@@ -69,14 +69,19 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
+import { mapState, mapActions } from "vuex";
+import { date } from 'quasar'
+const { formatDate } = date
 import EditTask from "components/Tasks/Modals/EditTask.vue";
+
 
 export default {
   props: ["task", "id"],
   components: {
     EditTask
+  },
+  computed: {
+    ...mapState('tasks', ['search'])
   },
   data() {
     return {
@@ -103,6 +108,21 @@ export default {
           this.deleteTask(id);
         });
     }
+  },
+  filters: {
+    niceDate(value) {
+      return date.formatDate(value, 'D. MMM YYYY')
+    },
+    searchHighlight(value, search) {
+      if(search) {
+        let searchRegExp = new RegExp(search, 'ig')
+        return value.replace(searchRegExp, (match) => {
+          return '<span class="bg-yellow-6">' + match  +'</span>'
+        } )
+      }
+      return value;
+    }
+
   }
 };
 </script>
