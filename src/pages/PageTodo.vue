@@ -1,30 +1,45 @@
 <template>
-  <q-page class="q-pa-md  ">
-    <div class="row q-mb-lg">
-      <Search />
-      <Sort />
-    </div> 
+  <q-page c>
+    <div class="q-pa-md absolute full-height full-width column">
+      <div class="row q-mb-lg">
+        <Search />
+        <Sort />
+      </div>
 
-    <p v-if="search && !Object.keys(tasksTodo).length && !Object.keys(tasksCompleted).length ">No search results</p>
+      <p
+        v-if="
+          search && 
+            !Object.keys(tasksTodo).length &&
+            !Object.keys(tasksCompleted).length
+        " 
+      >
+        No search results
+      </p>
+      <q-scroll-area class="q-scroll-area-tasks">
+        <NoTasks v-if="!Object.keys(tasksTodo).length && !search && !settings.showTasksInOneList" />
 
-    <NoTasks v-if="!Object.keys(tasksTodo).length && !search" />
+        <TasksTodo
+          :tasksTodo="tasksTodo"
+          v-if="Object.keys(tasksTodo).length"
+        />
+        <TasksCompleted
+          v-if="Object.keys(tasksCompleted).length"
+          :tasksCompleted="tasksCompleted"
+          class="q-mb-xl"
+        />
+      </q-scroll-area>
 
-    <TasksTodo :tasksTodo="tasksTodo" v-if="Object.keys(tasksTodo).length " />
-    <TasksCompleted
-      v-if="Object.keys(tasksCompleted).length"
-      :tasksCompleted="tasksCompleted"
-    />
-
-    <div class="absolute-bottom text-center q-mb-lg">
-      <q-btn
-        @click="showAddTask = true"
-        round
-        color="primary"
-        size="24px"
-        icon="add"
-      />
+      <div class="absolute-bottom text-center q-mb-lg no-pointer-events">
+        <q-btn
+          @click="showAddTask = true"
+          round
+          color="primary"
+          size="24px"
+          icon="add"
+          class="all-pointer-events"
+        />
+      </div>
     </div>
-
     <q-dialog
       v-model="showAddTask"
       transition-show="fade"
@@ -62,17 +77,21 @@ export default {
   },
   computed: {
     ...mapGetters("tasks", ["tasksTodo", "tasksCompleted"]),
-    ...mapState('tasks', ['search'])
+    ...mapGetters("settings", ["settings"]),
+    ...mapState("tasks", ["search"])
   },
   mounted() {
     this.$root.$on("showAddTask", () => {
       this.showAddTask = true;
     });
-    console.log(this.$q.dark.mode) ;
+    console.log(this.$q.dark.mode);
   }
 };
 </script>
 
-<style >
-
+<style>
+.q-scroll-area-tasks {
+  display: flex;
+  flex-grow: 1
+}
 </style>

@@ -17,10 +17,10 @@ const state = {
     },
     ID3: {
       name: "Get apples",
-      completed: true,
+      completed: false,
       dueDate: "2019/05/14",
       dueTime: "16:30"
-    }
+    },
   },
   search: "",
   sort: "dueDate"

@@ -1,6 +1,11 @@
 <template>
+<transition
+  appear
+  enter-active-class="animated zoomIn"
+  leave-active-class="animated zoomOut absolute-top"
+>
   <div >
-    <ListHeader bgColor="bg-orange-4">Todo</ListHeader>
+    <ListHeader v-if="!settings.showTasksInOneList" bgColor="bg-orange-4">Todo</ListHeader>
     <q-list  bordered separator>
       <Task
         v-for="(task, key) in tasksTodo"
@@ -10,18 +15,23 @@
       />
     </q-list>
   </div>
+</transition>
 </template>
 
 <script>
 import Task from "components/Tasks/Task";
 import ListHeader from "components/Shared/ListHeader";
+import { mapGetters} from 'vuex'
 
 export default {
   components: {
     Task,
     ListHeader
   },
-  props: ["tasksTodo"]
+  props: ["tasksTodo"],
+  computed: {
+    ...mapGetters('settings', ['settings'])
+  }
 };
 </script>
 
