@@ -38,6 +38,30 @@
         </q-item-section>
       </q-item>
 
+      <q-item
+        tag="label"
+        v-ripple
+        @click="visitOurWebsite">
+        <q-item-section>
+          <q-item-label>Visit our website</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-icon name="chevron_right"/>
+        </q-item-section>
+      </q-item>
+
+      <q-item
+        tag="label"
+        v-ripple
+        @click="emailUs">
+        <q-item-section>
+          <q-item-label>Email us</q-item-label>
+        </q-item-section>
+        <q-item-section side>
+          <q-icon name="chevron_right"/>
+        </q-item-section>
+      </q-item>
+
      
     </q-list>
   </q-page>
@@ -45,6 +69,8 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { openURL } from 'quasar'
+
 export default {
   computed: {
     ...mapGetters("settings", ["settings"]),
@@ -66,7 +92,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions("settings", ["setShow12HourTimeFormat", "setShowTasksInOneList"])
+    ...mapActions("settings", ["setShow12HourTimeFormat", "setShowTasksInOneList"]),
+    visitOurWebsite(){
+    openURL('https://www.codepedia.de/')
+     },
+    emailUs() {
+      window.location.href = 'mailto:s.haefelinger@gmx.de?subject=qTodoFeedback'
+    }
+   
   }
 };
 </script>
