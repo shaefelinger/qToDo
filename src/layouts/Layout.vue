@@ -6,14 +6,22 @@
           qTodo
         </q-toolbar-title>
 
-          <q-btn
+        <q-btn
+          v-if="!loggedIn"
           to="/auth"
-            flat
-            icon-right="account_circle"
-            label="Login" 
-            class="absolute-right"
-            />
-
+          flat
+          icon-right="account_circle"
+          label="Login"
+          class="absolute-right"
+        />
+        <q-btn
+          v-else
+          @click="logoutUser"
+          flat
+          icon-right="account_circle"
+          label="Logout"
+          class="absolute-right"
+        />
       </q-toolbar>
     </q-header>
 
@@ -67,6 +75,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "MainLayout",
   data() {
@@ -86,6 +96,12 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    ...mapState("auth", ["loggedIn"])
+  },
+  methods: {
+    ...mapActions('auth', ['logoutUser'])
   }
 };
 </script>

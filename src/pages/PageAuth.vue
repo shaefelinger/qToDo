@@ -1,6 +1,5 @@
 <template>
   <q-page padding>
-    <p>Auth</p>
 
     <q-card class="auth-tabs">
       <q-tabs
@@ -36,7 +35,7 @@ import LoginRegister from "components/Auth/LoginRegister.vue";
 export default {
   data() {
     return {
-      tab: "register"
+      tab: "login"
     };
   },
   components: {
