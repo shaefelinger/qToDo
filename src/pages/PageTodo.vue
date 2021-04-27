@@ -84,7 +84,6 @@ export default {
     this.$root.$on("showAddTask", () => {
       this.showAddTask = true;
     });
-    console.log(this.$q.dark.mode);
   }
 };
 </script>

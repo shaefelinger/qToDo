@@ -1,4 +1,8 @@
+import { LocalStorage, Loading } from "quasar";
 import { firebaseAuth } from "boot/firebase";
+import { showErrorMessage } from "src/functions/function-show-error-message";
+
+
 const state = {
   loggedIn: false
 };
@@ -11,36 +15,42 @@ const mutations = {
 
 const actions = {
   registerUser({}, payload) {
+    Loading.show()
     firebaseAuth
       .createUserWithEmailAndPassword(payload.email, payload.password)
       .then(response => {
         console.log("response:", response);
       })
       .catch(error => {
-        console.log("error.message:", error.message);
+        showErrorMessage(error.message);
       });
   },
   loginUser({}, payload) {
+    Loading.show();
     firebaseAuth
       .signInWithEmailAndPassword(payload.email, payload.password)
       .then(response => {
         console.log("response:", response);
       })
       .catch(error => {
-        console.log("error.message:", error.message);
+        showErrorMessage(error.message);
       });
   },
   logoutUser() {
     firebaseAuth.signOut();
   },
   handleAuthStateChange(context) {
-    firebaseAuth.onAuthStateChanged((user) => {
+    
+    firebaseAuth.onAuthStateChanged(user => {
+      Loading.hide();
       if (user) {
         context.commit("SET_LOGGED_IN", true);
-        this.$router.push('/').catch(err =>{})
+        LocalStorage.set("loggedIn", true);
+        this.$router.push("/").catch(err => {});
       } else {
         context.commit("SET_LOGGED_IN", false);
-        this.$router.replace("/auth").catch(err =>{});
+        LocalStorage.set("loggedIn", false);
+        this.$router.replace("/auth").catch(err => {});
       }
     });
   }
