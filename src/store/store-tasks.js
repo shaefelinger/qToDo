@@ -28,32 +28,32 @@ const state = {
 };
 
 const mutations = {
-  UPDATE_TASK (state, payload) {
+  UPDATE_TASK(state, payload) {
     Object.assign(state.tasks[payload.id], payload.updates);
   },
-  DELETE_TASK (state, id) {
+  DELETE_TASK(state, id) {
     Vue.delete(state.tasks, id);
   },
-  ADD_TASK (state, payload) {
+  ADD_TASK(state, payload) {
     Vue.set(state.tasks, payload.id, payload.task);
   },
-  SET_SEARCH (state, value) {
+  SET_SEARCH(state, value) {
     state.search = value;
   },
-  SET_SORT (state, value) {
+  SET_SORT(state, value) {
     state.sort = value;
-  },
+  }
 };
 
 const actions = {
-  updateTask (context, payload) {
+  updateTask(context, payload) {
     console.log("update task action");
     context.commit("UPDATE_TASK", payload);
   },
-  deleteTask (context, id) {
+  deleteTask(context, id) {
     context.commit("DELETE_TASK", id);
   },
-  addTask (context, task) {
+  addTask(context, task) {
     let taskId = uid();
     let payload = {
       id: taskId,
@@ -61,50 +61,66 @@ const actions = {
     };
     context.commit("ADD_TASK", payload);
   },
-  setSearch (context, value) {
+  setSearch(context, value) {
     context.commit("SET_SEARCH", value);
   },
-  setSort (context, value) {
+  setSort(context, value) {
     context.commit("SET_SORT", value);
   },
-  fbReadData ({ commit }) {
-    console.log('start reading data from Firebase');
-    let userId = firebaseAuth.currentUser.uid
-    let userTasks = firebaseDB.ref('tasks/' + userId)
+  fbReadData({ commit }) {
+    console.log("start reading data from Firebase");
+    let userId = firebaseAuth.currentUser.uid;
+    let userTasks = firebaseDB.ref("tasks/" + userId);
 
-    userTasks.on('child_added', snapshot => {
-      let task = snapshot.val()
+    // child added
+    userTasks.on("child_added", snapshot => {
+      let task = snapshot.val();
       let payload = {
         id: snapshot.key,
-        task: task,
-      }
+        task: task
+      };
       console.log(payload);
-      commit('ADD_TASK', payload)
-    })
+      commit("ADD_TASK", payload);
+    });
+    // child changed
+    userTasks.on("child_changed", snapshot => {
+      let task = snapshot.val();
+      let payload = {
+        id: snapshot.key,
+        updates: task
+      };
+      console.log(payload);
+      commit("UPDATE_TASK", payload);
+    });
+    // child removed
+    userTasks.on("child_removed", snapshot => {
+      let taskId = snapshot.key;
+      commit("DELETE_TASK", taskId);
+    });
   }
 };
 
 const getters = {
-  tasksSorted: (state) => {
-    let tasksSorted = {}
-    let keysOrdered = Object.keys(state.tasks)
+  tasksSorted: state => {
+    let tasksSorted = {};
+    let keysOrdered = Object.keys(state.tasks);
 
     keysOrdered.sort((a, b) => {
       let taskAProp = state.tasks[a][state.sort].toLowerCase();
       let taskBProp = state.tasks[b][state.sort].toLowerCase();
 
-      if (taskAProp > taskBProp) return 1
-      else if (taskAProp < taskBProp) return -1
-      else return 0
-    })
+      if (taskAProp > taskBProp) return 1;
+      else if (taskAProp < taskBProp) return -1;
+      else return 0;
+    });
 
     keysOrdered.forEach(key => {
-      tasksSorted[key] = state.tasks[key]
-    })
-    return tasksSorted
+      tasksSorted[key] = state.tasks[key];
+    });
+    return tasksSorted;
   },
   tasksFiltered: (state, getters) => {
-    let tasksSorted = getters.tasksSorted
+    let tasksSorted = getters.tasksSorted;
     let tasksFiltered = {};
     if (state.search) {
       Object.keys(tasksSorted).forEach(key => {
