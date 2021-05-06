@@ -8,13 +8,13 @@ const state = {
 };
 
 const mutations = {
-  SET_LOGGED_IN(state, value) {
+  SET_LOGGED_IN (state, value) {
     state.loggedIn = value;
   }
 };
 
 const actions = {
-  registerUser({}, payload) {
+  registerUser ({ }, payload) {
     Loading.show()
     firebaseAuth
       .createUserWithEmailAndPassword(payload.email, payload.password)
@@ -25,7 +25,7 @@ const actions = {
         showErrorMessage(error.message);
       });
   },
-  loginUser({}, payload) {
+  loginUser ({ }, payload) {
     Loading.show();
     firebaseAuth
       .signInWithEmailAndPassword(payload.email, payload.password)
@@ -36,21 +36,21 @@ const actions = {
         showErrorMessage(error.message);
       });
   },
-  logoutUser() {
+  logoutUser () {
     firebaseAuth.signOut();
   },
-  handleAuthStateChange(context) {
-    
+  handleAuthStateChange (context) {
     firebaseAuth.onAuthStateChanged(user => {
       Loading.hide();
       if (user) {
         context.commit("SET_LOGGED_IN", true);
         LocalStorage.set("loggedIn", true);
-        this.$router.push("/").catch(err => {});
+        this.$router.push("/").catch(err => { });
+        context.dispatch('tasks/fbReadData', null, { root: true })
       } else {
         context.commit("SET_LOGGED_IN", false);
         LocalStorage.set("loggedIn", false);
-        this.$router.replace("/auth").catch(err => {});
+        this.$router.replace("/auth").catch(err => { });
       }
     });
   }

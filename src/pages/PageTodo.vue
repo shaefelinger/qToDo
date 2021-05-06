@@ -1,18 +1,16 @@
 <template>
-  <q-page c>
+  <q-page>
     <div class="q-pa-md absolute full-height full-width column">
       <div class="row q-mb-lg">
         <Search />
         <Sort />
       </div>
 
-      <p
-        v-if="
+      <p v-if="
           search && 
             !Object.keys(tasksTodo).length &&
             !Object.keys(tasksCompleted).length
-        " 
-      >
+        ">
         No search results
       </p>
       <q-scroll-area class="q-scroll-area-tasks">
@@ -70,7 +68,7 @@ export default {
     Search,
     Sort
   },
-  data() {
+  data () {
     return {
       showAddTask: false
     };
@@ -80,7 +78,7 @@ export default {
     ...mapGetters("settings", ["settings"]),
     ...mapState("tasks", ["search"])
   },
-  mounted() {
+  mounted () {
     this.$root.$on("showAddTask", () => {
       this.showAddTask = true;
     });
@@ -91,6 +89,6 @@ export default {
 <style>
 .q-scroll-area-tasks {
   display: flex;
-  flex-grow: 1
+  flex-grow: 1;
 }
 </style>
