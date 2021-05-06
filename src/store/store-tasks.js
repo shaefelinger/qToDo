@@ -46,20 +46,20 @@ const mutations = {
 };
 
 const actions = {
-  updateTask(context, payload) {
+  updateTask({ dispatch }, payload) {
     console.log("update task action");
-    context.commit("UPDATE_TASK", payload);
+    dispatch("fbUpdateTask", payload);
   },
-  deleteTask(context, id) {
-    context.commit("DELETE_TASK", id);
+  deleteTask({ dispatch }, id) {
+    dispatch("fbDeleteTask", id);
   },
-  addTask(context, task) {
+  addTask({ dispatch }, task) {
     let taskId = uid();
     let payload = {
       id: taskId,
       task: task
     };
-    context.commit("ADD_TASK", payload);
+    dispatch("fbAddTask", payload);
   },
   setSearch(context, value) {
     context.commit("SET_SEARCH", value);
@@ -68,7 +68,6 @@ const actions = {
     context.commit("SET_SORT", value);
   },
   fbReadData({ commit }) {
-    console.log("start reading data from Firebase");
     let userId = firebaseAuth.currentUser.uid;
     let userTasks = firebaseDB.ref("tasks/" + userId);
 
@@ -97,6 +96,21 @@ const actions = {
       let taskId = snapshot.key;
       commit("DELETE_TASK", taskId);
     });
+  },
+  fbAddTask({}, payload) {
+    let userId = firebaseAuth.currentUser.uid;
+    let taskRef = firebaseDB.ref("tasks/" + userId + "/" + payload.id);
+    taskRef.set(payload.task);
+  },
+  fbUpdateTask({}, payload) {
+    let userId = firebaseAuth.currentUser.uid;
+    let taskRef = firebaseDB.ref("tasks/" + userId + "/" + payload.id);
+    taskRef.update(payload.updates);
+  },
+  fbDeleteTask({}, taskId) {
+    let userId = firebaseAuth.currentUser.uid;
+    let taskRef = firebaseDB.ref("tasks/" + userId + "/" + taskId);
+    taskRef.remove();
   }
 };
 
