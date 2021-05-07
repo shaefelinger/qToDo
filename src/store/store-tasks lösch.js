@@ -1,53 +1,53 @@
 import Vue from "vue";
 import { uid } from "quasar";
-import { firebaseDB, firebaseAuth } from "boot/firebase";
+import { firebaseDb, firebaseAuth } from "boot/firebase";
 
 const state = {
   tasks: {
-    // ID1: {
-    //   name: "Go to shop",
-    //   completed: false,
-    //   dueDate: "2019/05/12",
-    //   dueTime: "18:30"
+    // 'ID1': {
+    // 	name: 'Go to shop',
+    // 	completed: false,
+    // 	dueDate: '2019/05/12',
+    // 	dueTime: '18:30'
     // },
-    // ID2: {
-    //   name: "Get bananas",
-    //   completed: false,
-    //   dueDate: "2019/05/13",
-    //   dueTime: "14:00"
+    // 'ID2': {
+    // 	name: 'Get bananas',
+    // 	completed: false,
+    // 	dueDate: '2019/05/13',
+    // 	dueTime: '14:00'
     // },
-    // ID3: {
-    //   name: "Get apples",
-    //   completed: false,
-    //   dueDate: "2019/05/14",
-    //   dueTime: "16:30"
-    // },
+    // 'ID3': {
+    // 	name: 'Get apples',
+    // 	completed: false,
+    // 	dueDate: '2019/05/14',
+    // 	dueTime: '16:00'
+    // }
   },
   search: "",
-  sort: "dueDate",
+  sort: "name",
   tasksDownloaded: false
 };
 
 const mutations = {
-  UPDATE_TASK(state, payload) {
+  updateTask(state, payload) {
     Object.assign(state.tasks[payload.id], payload.updates);
   },
-  DELETE_TASK(state, id) {
+  deleteTask(state, id) {
     Vue.delete(state.tasks, id);
   },
-  ADD_TASK(state, payload) {
+  addTask(state, payload) {
     Vue.set(state.tasks, payload.id, payload.task);
   },
-  CLEAR_TASKS(state) {
+  clearTasks(state) {
     state.tasks = {};
   },
-  SET_SEARCH(state, value) {
+  setSearch(state, value) {
     state.search = value;
   },
-  SET_SORT(state, value) {
+  setSort(state, value) {
     state.sort = value;
   },
-  SET_TASKS_DOWNLOADED(state, value) {
+  setTasksDownloaded(state, value) {
     state.tasksDownloaded = value;
   }
 };
@@ -67,21 +67,22 @@ const actions = {
     };
     dispatch("fbAddTask", payload);
   },
-  setSearch(context, value) {
-    context.commit("SET_SEARCH", value);
+  setSearch({ commit }, value) {
+    commit("setSearch", value);
   },
-  setSort(context, value) {
-    context.commit("SET_SORT", value);
+  setSort({ commit }, value) {
+    commit("setSort", value);
   },
+
   fbReadData({ commit }) {
     let userId = firebaseAuth.currentUser.uid;
-    let userTasks = firebaseDB.ref("tasks/" + userId);
+    let userTasks = firebaseDb.ref("tasks/" + userId);
 
     // initial check for data
     userTasks.once(
       "value",
       snapshot => {
-        commit("SET_TASKS_DOWNLOADED", true);
+        commit("setTasksDownloaded", true);
       },
       error => {
         console.log("error.message: ", error.message);
@@ -95,8 +96,9 @@ const actions = {
         id: snapshot.key,
         task: task
       };
-      commit("ADD_TASK", payload);
+      commit("addTask", payload);
     });
+
     // child changed
     userTasks.on("child_changed", snapshot => {
       let task = snapshot.val();
@@ -104,41 +106,40 @@ const actions = {
         id: snapshot.key,
         updates: task
       };
-      console.log(payload);
-      commit("UPDATE_TASK", payload);
+      commit("updateTask", payload);
     });
+
     // child removed
     userTasks.on("child_removed", snapshot => {
       let taskId = snapshot.key;
-      commit("DELETE_TASK", taskId);
+      commit("deleteTask", taskId);
     });
   },
   fbAddTask({}, payload) {
     let userId = firebaseAuth.currentUser.uid;
-    let taskRef = firebaseDB.ref("tasks/" + userId + "/" + payload.id);
+    let taskRef = firebaseDb.ref("tasks/" + userId + "/" + payload.id);
     taskRef.set(payload.task);
   },
   fbUpdateTask({}, payload) {
     let userId = firebaseAuth.currentUser.uid;
-    let taskRef = firebaseDB.ref("tasks/" + userId + "/" + payload.id);
+    let taskRef = firebaseDb.ref("tasks/" + userId + "/" + payload.id);
     taskRef.update(payload.updates);
   },
   fbDeleteTask({}, taskId) {
     let userId = firebaseAuth.currentUser.uid;
-    let taskRef = firebaseDB.ref("tasks/" + userId + "/" + taskId);
+    let taskRef = firebaseDb.ref("tasks/" + userId + "/" + taskId);
     taskRef.remove();
   }
 };
 
 const getters = {
   tasksSorted: state => {
-    console.log("state.tasks", state.tasks);
-    let tasksSorted = {};
-    let keysOrdered = Object.keys(state.tasks);
+    let tasksSorted = {},
+      keysOrdered = Object.keys(state.tasks);
 
     keysOrdered.sort((a, b) => {
-      let taskAProp = state.tasks[a][state.sort].toLowerCase();
-      let taskBProp = state.tasks[b][state.sort].toLowerCase();
+      let taskAProp = state.tasks[a][state.sort].toLowerCase(),
+        taskBProp = state.tasks[b][state.sort].toLowerCase();
 
       if (taskAProp > taskBProp) return 1;
       else if (taskAProp < taskBProp) return -1;
@@ -148,16 +149,17 @@ const getters = {
     keysOrdered.forEach(key => {
       tasksSorted[key] = state.tasks[key];
     });
+
     return tasksSorted;
   },
   tasksFiltered: (state, getters) => {
-    let tasksSorted = getters.tasksSorted;
-    let tasksFiltered = {};
+    let tasksSorted = getters.tasksSorted,
+      tasksFiltered = {};
     if (state.search) {
-      Object.keys(tasksSorted).forEach(key => {
-        let task = tasksSorted[key];
-        let taskNameLowerCase = task.name.toLowerCase();
-        let searchLowerCase = state.search.toLowerCase();
+      Object.keys(tasksSorted).forEach(function(key) {
+        let task = tasksSorted[key],
+          taskNameLowerCase = task.name.toLowerCase(),
+          searchLowerCase = state.search.toLowerCase();
         if (taskNameLowerCase.includes(searchLowerCase)) {
           tasksFiltered[key] = task;
         }
@@ -169,7 +171,7 @@ const getters = {
   tasksTodo: (state, getters) => {
     let tasksFiltered = getters.tasksFiltered;
     let tasks = {};
-    Object.keys(tasksFiltered).forEach(key => {
+    Object.keys(tasksFiltered).forEach(function(key) {
       let task = tasksFiltered[key];
       if (!task.completed) {
         tasks[key] = task;
@@ -179,9 +181,8 @@ const getters = {
   },
   tasksCompleted: (state, getters) => {
     let tasksFiltered = getters.tasksFiltered;
-
     let tasks = {};
-    Object.keys(tasksFiltered).forEach(key => {
+    Object.keys(tasksFiltered).forEach(function(key) {
       let task = tasksFiltered[key];
       if (task.completed) {
         tasks[key] = task;
