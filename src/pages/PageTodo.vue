@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="q-pa-md absolute full-height full-width column">
-      <template>
+      <template v-if="tasksDownloaded">
         <div class="row q-mb-lg">
           <Search />
           <Sort />
@@ -44,7 +44,7 @@
           />
         </div>
       </template>
-      <template>
+      <template v-else>
         <span class="absolute-center">
           <q-spinner color="primary" size="5em" />
         </span>
