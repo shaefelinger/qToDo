@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated>
+    <q-header elevated class="bg-blue-grey-10 ">
       <q-toolbar>
         <q-toolbar-title class="absolute-center">
           qTodo
@@ -44,18 +44,18 @@
       :width="250"
       show-if-above
       bordered
-      content-class="bg-primary"
+      content-class="bg-grey-2  "
     >
-      <q-list dark>
+      <q-list>
         <q-item-label header>Navigation </q-item-label>
 
         <q-item
           v-for="nav in navs"
           :key="nav.label"
           :to="nav.to"
-          class="text-grey-4"
           exact
           clickable
+          class="text-grey-7"
         >
           <q-item-section avatar>
             <q-icon :name="nav.icon" />
@@ -101,7 +101,7 @@ export default {
     ...mapState("auth", ["loggedIn"])
   },
   methods: {
-    ...mapActions('auth', ['logoutUser'])
+    ...mapActions("auth", ["logoutUser"])
   }
 };
 </script>
@@ -115,7 +115,9 @@ export default {
 
 .q-drawer {
   .q-router-link--exact-active {
-    color: white !important;
+    color: black !important;
+    font-weight: 500;
+    background: #dddddd;
   }
 }
 </style>
