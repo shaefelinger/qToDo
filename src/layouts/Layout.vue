@@ -55,7 +55,6 @@
           :to="nav.to"
           exact
           clickable
-          class="text-grey-7"
         >
           <q-item-section avatar>
             <q-icon :name="nav.icon" />
@@ -115,7 +114,7 @@ export default {
 
 .q-drawer {
   .q-router-link--exact-active {
-    color: black !important;
+    // color: black !important;
     font-weight: 500;
     background: #dddddd;
   }
