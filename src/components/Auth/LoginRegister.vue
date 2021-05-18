@@ -3,10 +3,7 @@
     <div class="row q-mb-md">
       <q-banner class="bg-grey-3 col">
         <template v-slot:avatar>
-          <q-icon
-            name="account_circle"
-            color="primary"
-          />
+          <q-icon name="account_circle" color="primary" />
         </template>
         {{ tab | titleCase }} to access your Todos anywhere
       </q-banner>
@@ -17,6 +14,7 @@
         outlined
         v-model="formData.email"
         label="Email"
+        type="email"
         ref="email"
         stack-label
         lazy-rules
@@ -42,11 +40,7 @@
     </div>
     <div class="row">
       <q-space />
-      <q-btn
-        type="submit"
-        color="primary"
-        :label="tab"
-      />
+      <q-btn type="submit" color="primary" :label="tab" />
     </div>
   </form>
 </template>
@@ -55,7 +49,7 @@
 import { mapActions } from "vuex";
 
 export default {
-  data () {
+  data() {
     return {
       formData: {
         email: "",
@@ -66,11 +60,11 @@ export default {
   props: ["tab"],
   methods: {
     ...mapActions("auth", ["registerUser", "loginUser"]),
-    isValidEmailAddress (email) {
+    isValidEmailAddress(email) {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(email).toLowerCase());
     },
-    submitForm () {
+    submitForm() {
       this.$refs.email.validate();
       this.$refs.password.validate();
       if (!this.$refs.email.hasError && !this.$refs.password.hasError) {
@@ -83,7 +77,7 @@ export default {
     }
   },
   filters: {
-    titleCase (value) {
+    titleCase(value) {
       return value.charAt(0).toUpperCase() + value.slice(1);
     }
   }
