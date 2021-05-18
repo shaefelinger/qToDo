@@ -33,7 +33,7 @@ const menu = Menu.buildFromTemplate(menuTemplate);
 app.on("ready", () => {
   mainWindow = new BrowserWindow({
     width: 1000,
-    height: 600,
+    height: 800,
     minWidth: 800,
     minHeight: 500,
     useContentSize: true,
