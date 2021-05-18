@@ -64,6 +64,21 @@
             <q-item-label>{{ nav.label }}</q-item-label>
           </q-item-section>
         </q-item>
+
+        <q-item
+          clickable
+          @click="quitApp"
+          class="absolute-bottom"
+          v-if="$q.platform.is.electron"
+        >
+          <q-item-section avatar>
+            <q-icon name="power_settings_new" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>Quit</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -100,7 +115,21 @@ export default {
     ...mapState("auth", ["loggedIn"])
   },
   methods: {
-    ...mapActions("auth", ["logoutUser"])
+    ...mapActions("auth", ["logoutUser"]),
+    quitApp() {
+      this.$q
+        .dialog({
+          title: "Confirm",
+          message: "Really quit?",
+          cancel: true,
+          persistent: true
+        })
+        .onOk(() => {
+          if (this.$q.platform.is.electron) {
+            require("electron").ipcRenderer.send("quit-app");
+          }
+        });
+    }
   }
 };
 </script>
