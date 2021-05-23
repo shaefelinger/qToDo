@@ -11,11 +11,9 @@
         </q-item-section>
       </q-item>
 
-      <q-item
-        tag="label"
-        v-ripple>
+      <q-item tag="label" v-ripple>
         <q-item-section>
-           <q-item-label>Show tasks in one list</q-item-label>
+          <q-item-label>Show tasks in one list</q-item-label>
         </q-item-section>
         <q-item-section side>
           <q-toggle v-model="showTasksInOneList" color="blue" />
@@ -23,53 +21,41 @@
       </q-item>
     </q-list>
 
-        
-    <q-list bordered padding >
+    <q-list bordered padding>
       <q-item-label header>More</q-item-label>
-      <q-item
-        tag="label"
-        v-ripple
-        to="/settings/help">
+      <q-item tag="label" v-ripple to="/settings/help">
         <q-item-section>
           <q-item-label>Help</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-icon name="chevron_right"/>
+          <q-icon name="chevron_right" />
         </q-item-section>
       </q-item>
 
-      <q-item
-        tag="label"
-        v-ripple
-        @click="visitOurWebsite">
+      <q-item tag="label" v-ripple @click="visitOurWebsite">
         <q-item-section>
           <q-item-label>Visit our website</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-icon name="chevron_right"/>
+          <q-icon name="chevron_right" />
         </q-item-section>
       </q-item>
 
-      <q-item
-        tag="label"
-        v-ripple
-        @click="emailUs">
+      <q-item tag="label" v-ripple @click="emailUs">
         <q-item-section>
           <q-item-label>Email us</q-item-label>
         </q-item-section>
         <q-item-section side>
-          <q-icon name="chevron_right"/>
+          <q-icon name="chevron_right" />
         </q-item-section>
       </q-item>
-
-     
     </q-list>
   </q-page>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { openURL } from 'quasar'
+import { openURL } from "quasar";
 
 export default {
   computed: {
@@ -92,14 +78,25 @@ export default {
     }
   },
   methods: {
-    ...mapActions("settings", ["setShow12HourTimeFormat", "setShowTasksInOneList"]),
-    visitOurWebsite(){
-    openURL('https://www.codepedia.de/')
-     },
+    ...mapActions("settings", [
+      "setShow12HourTimeFormat",
+      "setShowTasksInOneList"
+    ]),
+    visitOurWebsite() {
+      if (this.$q.platform.is.android && this.$q.platform.is.cordova) {
+        cordova.InAppBrowser.open(
+          "https://www.codepedia.de/",
+          "_blank",
+          "location=yes"
+        );
+      } else {
+        openURL("https://www.codepedia.de/");
+      }
+    },
     emailUs() {
-      window.location.href = 'mailto:s.haefelinger@gmx.de?subject=qTodoFeedback'
+      window.location.href =
+        "mailto:s.haefelinger@gmx.de?subject=qTodoFeedback";
     }
-   
   }
 };
 </script>

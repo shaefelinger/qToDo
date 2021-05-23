@@ -1,0 +1,8 @@
+alias pd="pwd"
+alias glog='git log --pretty=oneline'
+
+export ANDROID_HOME="$HOME/Library/Android/Sdk"
+export ANDROID_SDK_ROOT="$HOME/Library/Android/Sdk"
+export PATH=$PATH:$ANDROID_SDK_ROOT/tools; PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+
+
