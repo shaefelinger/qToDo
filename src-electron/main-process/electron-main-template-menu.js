@@ -33,32 +33,45 @@ export const menuTemplate = [
   // { role: 'fileMenu' }
   {
     label: "File",
-    submenu: [isMac ? { role: "close" } : { role: "quit" }]
-  },
-  // { role: 'editMenu' }
-  {
-    label: "Edit",
     submenu: [
-      { role: "undo" },
-      { role: "redo" },
-      { type: "separator" },
-      { role: "cut" },
-      { role: "copy" },
-      { role: "paste" },
       ...(isMac
-        ? [
-            { role: "pasteAndMatchStyle" },
-            { role: "delete" },
-            { role: "selectAll" },
-            { type: "separator" },
+        ? [{ role: "close" }]
+        : [
             {
-              label: "Speech",
-              submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }]
-            }
-          ]
-        : [{ role: "delete" }, { type: "separator" }, { role: "selectAll" }])
+              label: "Settings",
+              accelerator: "CmdOrCtrl+,",
+              click() {
+                mainWindow.webContents.send("show-settings");
+              }
+            },
+            { role: "quit" }
+          ])
     ]
   },
+  // { role: 'editMenu' }
+  // {
+  //   label: "Edit",
+  //   submenu: [
+  //     { role: "undo" },
+  //     { role: "redo" },
+  //     { type: "separator" },
+  //     { role: "cut" },
+  //     { role: "copy" },
+  //     { role: "paste" },
+  //     ...(isMac
+  //       ? [
+  //           { role: "pasteAndMatchStyle" },
+  //           { role: "delete" },
+  //           { role: "selectAll" },
+  //           { type: "separator" },
+  //           {
+  //             label: "Speech",
+  //             submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }]
+  //           }
+  //         ]
+  //       : [{ role: "delete" }, { type: "separator" }, { role: "selectAll" }])
+  //   ]
+  // },
   // { role: 'viewMenu' }
   {
     label: "View",
@@ -75,21 +88,21 @@ export const menuTemplate = [
     ]
   },
   // { role: 'windowMenu' }
-  {
-    label: "Window",
-    submenu: [
-      { role: "minimize" },
-      { role: "zoom" },
-      ...(isMac
-        ? [
-            { type: "separator" },
-            { role: "front" },
-            { type: "separator" },
-            { role: "window" }
-          ]
-        : [{ role: "close" }])
-    ]
-  },
+  // {
+  //   label: "Window",
+  //   submenu: [
+  //     { role: "minimize" },
+  //     { role: "zoom" },
+  //     ...(isMac
+  //       ? [
+  //           { type: "separator" },
+  //           { role: "front" },
+  //           { type: "separator" },
+  //           { role: "window" }
+  //         ]
+  //       : [{ role: "close" }])
+  //   ]
+  // },
   {
     role: "help",
     submenu: [

@@ -1,0 +1,19 @@
+{
+  "name": "qtodo",
+  "version": "0.0.1",
+  "description": "A Quasar Framework app",
+  "productName": "qTodo",
+  "author": "Steffen Häfelinger <s.haefelinger@gmx.de>",
+  "private": true,
+  "dependencies": {
+    "core-js": "3.10.1",
+    "firebase": "8.4.2",
+    "quasar": "1.15.10"
+  },
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "main": "./electron-main.js"
+}
