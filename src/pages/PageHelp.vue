@@ -1,23 +1,26 @@
 <template>
-<q-page padding>
-<q-btn
-  to="/settings"
-  flat
-  color="primary"
-  icon="chevron_left"
-  label="Back" />
-<h5>How to use qTodo</h5>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident quo exercitationem molestias est temporibus quos eveniet, impedit sit, ex inventore sequi sint reprehenderit eos nulla. Magni hic mollitia voluptas voluptates.</p>
-</q-page>
-  
+  <q-page padding>
+    <q-btn
+      to="/settings"
+      flat
+      color="primary"
+      icon="chevron_left"
+      label="Back"
+    />
+    <h5>About this Project</h5>
+    <p>
+      This Project is based on the Awesome-ToDo-App from this great
+      Udemy-Course.
+      <a href="">Build Quasar ToDo-App</a>. It demonstrates the possibilities of
+      the Quasar-Framework and from the same codebase Apps can be easily created
+      for: Web, IOs, Android, Mac, Windows.
+      <br />
+    </p>
+  </q-page>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
-<style>
-
-</style>
+<style></style>
